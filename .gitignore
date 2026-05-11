@@ -1,0 +1,39 @@
+# ─────────────────────────────────────────────────────────────────
+# .gitignore for public homelab reference repo
+#
+# This repo is meant to be public. Nothing sensitive should ever
+# end up here. This gitignore is belt-and-suspenders.
+# ─────────────────────────────────────────────────────────────────
+
+# Never commit real secrets, even by accident
+*.secret
+*.token
+*-token
+secrets/
+.secrets/
+**/users.yml
+**/users.yaml
+**/credentials*.json
+*.pem
+*.key
+
+# Never commit real (non-template) configs
+Caddyfile
+!templates/Caddyfile.example
+configuration.yml
+!templates/*.yml.example
+!templates/*.yaml.example
+config.yml
+!templates/cloudflared-config.yml.example
+
+# Editor / OS junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Logs
+*.log

@@ -1,0 +1,106 @@
+# ─────────────────────────────────────────────────────────────────
+# Caddyfile.example
+#
+# Generic Caddy reverse-proxy + Authelia 2FA template.
+# Replace <your-domain> with your actual domain throughout.
+# Adjust service ports to match your local bindings.
+# ─────────────────────────────────────────────────────────────────
+
+{
+  # Trust proxies in RFC1918 + loopback + Tailscale CGNAT.
+  # Required for Authelia forward_auth headers to propagate correctly.
+  servers {
+    trusted_proxies static private_ranges
+  }
+}
+
+# ─── Snippets ───────────────────────────────────────────────────
+
+# DNS-01 TLS via Cloudflare
+# Requires CLOUDFLARE_API_TOKEN env var on the Caddy service.
+# NOTE: if your Caddy build rejects the token as too short/long,
+# see docs/lessons-learned.md for the regex-patch instructions.
+(tls_cloudflare) {
+  tls {
+    dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+  }
+}
+
+# Authelia forward_auth — apply with `import authelia` in any block
+(authelia) {
+  forward_auth localhost:9091 {
+    uri /api/authz/forward-auth
+    copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+  }
+}
+
+# ─── Authelia itself (the auth portal) — must be public ────────
+auth.<your-domain> {
+  import tls_cloudflare
+  reverse_proxy localhost:9091
+}
+
+# ─── Protected service examples ────────────────────────────────
+# Each gated by Authelia 2FA. Adjust ports to match your stack.
+
+ha.<your-domain> {
+  import tls_cloudflare
+  import authelia
+  reverse_proxy localhost:8123
+}
+
+pihole.<your-domain> {
+  import tls_cloudflare
+  import authelia
+  redir / /admin 302
+  reverse_proxy http://localhost:8888
+}
+
+files.<your-domain> {
+  import tls_cloudflare
+  import authelia
+  reverse_proxy localhost:3000
+}
+
+status.<your-domain> {
+  import tls_cloudflare
+  import authelia
+  reverse_proxy http://127.0.0.1:3001
+}
+
+# ─── Protected static-files example ────────────────────────────
+# Serves a directory of HTML/assets, gated by Authelia.
+
+docs.<your-domain> {
+  import tls_cloudflare
+  import authelia
+  root * /srv/docs
+  file_server
+}
+
+# ─── Public static-files example (NO auth) ─────────────────────
+# Use sparingly — for portfolio pages, public landing, resume, etc.
+
+<your-domain> {
+  import tls_cloudflare
+  root * /var/www/portfolio
+  file_server
+  encode gzip
+}
+
+# ─── Forward_auth header-injection pattern ─────────────────────
+# For apps that need the Authelia username injected as a header.
+# Example: an internal app that reads X-Remote-User to identify
+# the logged-in person.
+
+myapp.<your-domain> {
+  import tls_cloudflare
+  forward_auth 127.0.0.1:9091 {
+    uri /api/authz/forward-auth
+    copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+  }
+  reverse_proxy 127.0.0.1:8765 {
+    header_up X-Remote-User {http.request.header.Remote-User}
+  }
+  encode gzip zstd
+}

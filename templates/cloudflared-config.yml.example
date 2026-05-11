@@ -1,0 +1,58 @@
+# ─────────────────────────────────────────────────────────────────
+# cloudflared-config.yml.example
+#
+# Replace <your-tunnel-id> with the UUID Cloudflare assigned when
+# you created the tunnel with `cloudflared tunnel create <name>`.
+#
+# Replace <your-domain> with your actual domain.
+# The credentials JSON is downloaded automatically when you create
+# the tunnel — keep it OUT of git, store securely.
+# ─────────────────────────────────────────────────────────────────
+
+tunnel: <your-tunnel-id>
+credentials-file: /home/<your-user>/.cloudflared/<your-tunnel-id>.json
+
+ingress:
+  # ─── One entry per protected subdomain ────────────────────────
+  # `originServerName` matches the hostname so cloudflared trusts
+  # the cert Caddy presents at localhost:443.
+
+  - hostname: ha.<your-domain>
+    service: https://localhost:443
+    originRequest:
+      noTLSVerify: true
+      originServerName: ha.<your-domain>
+
+  - hostname: pihole.<your-domain>
+    service: https://localhost:443
+    originRequest:
+      noTLSVerify: true
+      originServerName: pihole.<your-domain>
+
+  - hostname: files.<your-domain>
+    service: https://localhost:443
+    originRequest:
+      noTLSVerify: true
+      originServerName: files.<your-domain>
+
+  - hostname: status.<your-domain>
+    service: https://localhost:443
+    originRequest:
+      noTLSVerify: true
+      originServerName: status.<your-domain>
+
+  - hostname: auth.<your-domain>
+    service: https://localhost:443
+    originRequest:
+      noTLSVerify: true
+      originServerName: auth.<your-domain>
+
+  # ─── Apex / portfolio (public, no auth) ───────────────────────
+  - hostname: <your-domain>
+    service: https://localhost:443
+    originRequest:
+      noTLSVerify: true
+      originServerName: <your-domain>
+
+  # ─── Catch-all (must be LAST) ────────────────────────────────
+  - service: http_status:404
