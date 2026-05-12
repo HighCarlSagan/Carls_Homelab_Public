@@ -233,7 +233,7 @@ MIT. See [LICENSE](LICENSE). Use, fork, adapt freely.
 
 ## Author
 
-**Mak (Mayank Shrivastava)**
-[github.com/HighCarlSagan](https://github.com/HighCarlSagan)
+**Mayank S (HighCarlSagan)** — [GitHub @HighCarlSagan](https://github.com/HighCarlSagan) · [highcarlsagan.dev](https://highcarlsagan.dev)
+
 
 Built and tuned over many late nights in Bangalore.
