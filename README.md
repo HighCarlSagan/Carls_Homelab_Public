@@ -31,18 +31,18 @@ The setup is meant to be useful as a reference — if you're building your own a
 
 | # | Requirement | Outcome |
 |---|---|---|
-| 1 | Always-on, low-power server | ✅ Raspberry Pi 4 4GB |
-| 2 | Zero open inbound ports on the router | ✅ Tailscale + Cloudflare Tunnel (both outbound-only) |
-| 3 | 2FA on every public-facing service | ✅ Authelia + TOTP on every subdomain except portfolio + resume |
-| 4 | Reproducible from scratch with one script | ✅ `restore.sh` rebuilds the stack |
-| 5 | Ad-blocking DNS for all my devices | ✅ Pi-hole with Tailscale DNS override |
-| 6 | Smart-home automation hub | ✅ Home Assistant |
-| 7 | File sync / remote file access | ✅ Filebrowser |
-| 8 | MQTT broker for ESP32 fleet | ✅ Mosquitto |
-| 9 | Free or near-free tier on all paid services | ✅ Cloudflare free, Tailscale free |
-| 10 | Service uptime monitoring | ✅ Uptime Kuma |
-| 11 | Daily automated config backup | ✅ Cron job → archive on Filebrowser |
-| 12 | Custom domain email without running a mail server | ✅ Cloudflare Email Routing → Gmail |
+| 1 | Always-on, low-power server | Raspberry Pi 4 4GB |
+| 2 | Zero open inbound ports on the router | Tailscale + Cloudflare Tunnel (both outbound-only) |
+| 3 | 2FA on every public-facing service | Authelia + TOTP on every subdomain except portfolio + resume |
+| 4 | Reproducible from scratch with one script | `restore.sh` rebuilds the stack |
+| 5 | Ad-blocking DNS for all my devices | Pi-hole with Tailscale DNS override |
+| 6 | Smart-home automation hub | Home Assistant |
+| 7 | File sync / remote file access | Filebrowser |
+| 8 | MQTT broker for ESP32 fleet | Mosquitto |
+| 9 | Free or near-free tier on all paid services | Cloudflare free, Tailscale free |
+| 10 | Service uptime monitoring | Uptime Kuma |
+| 11 | Daily automated config backup | Cron job → archive on Filebrowser |
+| 12 | Custom domain email without running a mail server | Cloudflare Email Routing → Gmail |
 
 ---
 
